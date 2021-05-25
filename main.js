@@ -156,17 +156,23 @@ Vue.component('product', {
 Vue.component('product-review', {
     template : `
     <form class ="review-form" @submit.prevent="onSubmit">
+    <p v-if="errors.length">
+    <b>Please correct the following errors</b>
+    <ul>
+    <li v-for="error in errors">{{ error }}</li>
+    </ul>
+     </p>
   <p>
   <label for="name">Name:</label>
-  <input type="text" id="name" v-model="name" required>
+  <input type="text" id="name" v-model="name">
   </p>
   <p>
   <label for="review">Review:</label>
-  <input type="text" id="review" v-model="review" required>
+  <input type="text" id="review" v-model="review">
   </p>
   <p>
   <label for="rating">Rating:</label>
-  <select id="rating" v-model.number="rating" required>
+  <select id="rating" v-model.number="rating">
   <option>5</option>
   <option>4</option>
   <option>3</option>
@@ -174,7 +180,10 @@ Vue.component('product-review', {
   <option>1</option>
  </select>
 </p>
-
+<p> Would you recommend this product?
+   <label>yes<input type="radio" value="yes" v-model="recommend"></label>
+   <label>No<input type="radio" value="No" v-model="recommend"></label>
+  </p>
   <p>
   <input type="submit" value="Submit">
   </p>
@@ -184,20 +193,33 @@ Vue.component('product-review', {
         return {
             name : null,
             review : null,
-            rating : null
+            rating : null,
+            recommend : null,
+            errors : []
         }
     },
     methods: {
         onSubmit() {
-            let productReview = {
-                name:this.name,
-                review:this.review,
-                rating:this.rating
+            this.errors = []
+            if(this.name && this.review && this.rating&& this.recommend){
+                let productReview = {
+                    name:this.name,
+                    review:this.review,
+                    rating:this.rating,
+                    recommend:this.recommend
+                }
+                this.$emit('review-submitted', productReview)
+                this.name = null
+                this.review = null
+                this.rating = null
+                this.recommend = null
+            } else {
+                if(!this.name) this.errors.push("Name required")
+                if(!this.review) this.errors.push("Review required")
+                if(!this.rating) this.errors.push("Rating required")
+                if(!this.recommend) this.errors.push("Recommend required")
             }
-            this.$emit('review-submitted', productReview)
-            this.name = null
-            this.review = null
-            this.rating = null
+
         }
     }
 })
