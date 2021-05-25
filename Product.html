@@ -12,7 +12,9 @@
 
 <div class="container">
     <div id="app">
-        <product></product>
+<!-- putting cart into the global position so that other items can be add into the cart  -->
+        <button type="button" class="btn btn-primary">Cart({{cart.length}})</button>
+        <product :premium="premium" @add-to-cart="updateCart" @remove-from-cart="removeItem"></product>
     </div>
 </div>
 
