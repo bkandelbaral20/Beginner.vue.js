@@ -41,5 +41,8 @@
    We can use the .number modifier to tell Vue to cast that value as a number, but there is a bug with it
    We can use the .prevent event modifier to stop the page from reloading when the form is submitted
    We can use Vue to do fairly simple custom form validation
+   
+7. Tabs
+   
 
    
